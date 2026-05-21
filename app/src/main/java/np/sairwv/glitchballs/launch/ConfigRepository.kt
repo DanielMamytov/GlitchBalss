@@ -136,19 +136,12 @@ class ConfigRepository(
     private suspend fun buildPayload(launchData: AppsFlyerLaunchData): JSONObject {
         val payload = JSONObject()
 
-        if (launchData.conversionData.isNotEmpty()) {
-            payload.putAny("conversion_data", launchData.conversionData)
-        }
-        if (launchData.deepLinkData.isNotEmpty()) {
-            payload.putAny("deep_link_data", launchData.deepLinkData)
-        }
-
         launchData.conversionData.forEach { (key, value) ->
             payload.putAny(key, value)
         }
 
         launchData.deepLinkData.forEach { (key, value) ->
-            if (isMeaningfulPayloadValue(value) || !payload.has(key)) {
+            if (!payload.has(key) && isMeaningfulPayloadValue(value)) {
                 payload.putAny(key, value)
             }
         }
