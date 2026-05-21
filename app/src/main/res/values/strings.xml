@@ -1,0 +1,21 @@
+<resources>
+    <string name="app_name">Glitch Balls</string>
+    <string name="hello_blank_fragment">Glitch Balls</string>
+
+    <string name="connection_error_title">Connection Error</string>
+    <string name="connection_error_body">Check your internet connection and try again.</string>
+    <string name="retry_connection">Try Again</string>
+
+    <string name="web_prompt_title">Stay in the Glitch?</string>
+    <string name="web_prompt_body">Allow notifications to receive updates, event drops, and reminders.</string>
+    <string name="web_prompt_allow">Allow</string>
+    <string name="web_prompt_skip">Not Now</string>
+
+    <string name="notification_title">Glitch Balls</string>
+    <string name="notification_message">A new update is ready.</string>
+
+    <string name="web_push_channel_id">glitchballs_web_push</string>
+    <string name="web_push_channel_name">Glitch Balls Updates</string>
+    <string name="web_push_channel_description">Notifications and updates.</string>
+    <string name="web_push_fallback_body">Open the latest Glitch Balls update.</string>
+</resources>

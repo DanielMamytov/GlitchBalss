@@ -1,0 +1,29 @@
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <style name="Base.Theme.GLITCHBALLS" parent="Theme.Material3.DayNight.NoActionBar">
+        <item name="colorPrimary">@color/glitch_green</item>
+        <item name="colorSecondary">@color/glitch_pink</item>
+        <item name="colorTertiary">@color/glitch_yellow</item>
+        <item name="android:windowBackground">@color/night_abyss</item>
+        <item name="colorSurface">@color/panel_surface_alt</item>
+        <item name="colorSurfaceContainer">@color/panel_surface</item>
+        <item name="android:statusBarColor">@android:color/transparent</item>
+        <item name="android:navigationBarColor">@android:color/transparent</item>
+        <item name="android:windowLightStatusBar">false</item>
+    </style>
+
+    <style name="Theme.GLITCHBALLS" parent="Base.Theme.GLITCHBALLS" />
+
+    <style name="Theme.GLITCHBALLS.WebFullscreen" parent="Theme.GLITCHBALLS">
+        <item name="android:windowFullscreen">true</item>
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:windowActionBar">false</item>
+        <item name="android:windowDrawsSystemBarBackgrounds">true</item>
+        <item name="android:statusBarColor">@android:color/transparent</item>
+        <item name="android:navigationBarColor">@android:color/transparent</item>
+        <item name="android:windowLayoutInDisplayCutoutMode">shortEdges</item>
+        <item name="android:windowLightStatusBar">false</item>
+        <item name="android:windowLightNavigationBar">false</item>
+        <item name="android:enforceStatusBarContrast">false</item>
+        <item name="android:enforceNavigationBarContrast">false</item>
+    </style>
+</resources>

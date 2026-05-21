@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="night_abyss">#050509</color>
+    <color name="glitch_black">#070710</color>
+    <color name="glitch_deep_violet">#19002F</color>
+    <color name="panel_surface">#DD111827</color>
+    <color name="panel_surface_alt">#B40A0F1F</color>
+    <color name="glitch_green">#00FF6A</color>
+    <color name="glitch_pink">#FF2BD6</color>
+    <color name="glitch_yellow">#F8FF35</color>
+    <color name="glitch_blue">#16F1FF</color>
+    <color name="text_muted">#C4CCE8</color>
+    <color name="black">#FF000000</color>
+    <color name="white">#FFFFFFFF</color>
+</resources>
