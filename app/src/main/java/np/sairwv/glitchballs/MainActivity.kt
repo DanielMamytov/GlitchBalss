@@ -170,10 +170,10 @@ class MainActivity : AppCompatActivity() {
         }
 
         return intent.dataString
-            ?.takeIf { shouldUseIntentDataAsNotificationUrl(intent, it) }
+            ?.takeIf { shouldUseIntentDataAsNotificationUrl(it) }
     }
 
-    private fun shouldUseIntentDataAsNotificationUrl(intent: Intent, url: String): Boolean {
+    private fun shouldUseIntentDataAsNotificationUrl(url: String): Boolean {
         if (url.isBlank()) {
             return false
         }
@@ -184,25 +184,7 @@ class MainActivity : AppCompatActivity() {
             return false
         }
 
-        return intent.action != Intent.ACTION_VIEW || !uri.hasAppsFlyerDeepLinkMarkers()
-    }
-
-    private fun Uri.hasAppsFlyerDeepLinkMarkers(): Boolean {
-        val host = host.orEmpty()
-        if (host.contains("onelink", ignoreCase = true)) {
-            return true
-        }
-
-        val queryNames = runCatching {
-            queryParameterNames.map { it.lowercase() }
-        }.getOrDefault(emptyList())
-
-        return queryNames.any { parameter ->
-            parameter == "c" ||
-                    parameter == "pid" ||
-                    parameter.startsWith("af_") ||
-                    parameter.startsWith("deep_link")
-        }
+        return true
     }
 
     private fun dp(value: Int): Int {

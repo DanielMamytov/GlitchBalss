@@ -146,16 +146,25 @@ class WebViewActivity : AppCompatActivity() {
     }
 
     private fun applyFullBleedInsets() {
-        ViewCompat.setOnApplyWindowInsetsListener(binding.root) { _, _ ->
+        ViewCompat.setOnApplyWindowInsetsListener(binding.root) { _, insets ->
+            val systemBars = insets.getInsetsIgnoringVisibility(
+                WindowInsetsCompat.Type.systemBars(),
+            )
+            val displayCutout = insets.getInsetsIgnoringVisibility(
+                WindowInsetsCompat.Type.displayCutout(),
+            )
+
             binding.webViewHost.updatePadding(
-                left = 0,
-                top = 0,
-                right = 0,
-                bottom = 0,
+                left = displayCutout.left,
+                top = maxOf(systemBars.top, displayCutout.top),
+                right = displayCutout.right,
+                bottom = maxOf(systemBars.bottom, displayCutout.bottom),
             )
             hideSystemBars()
             WindowInsetsCompat.CONSUMED
         }
+
+        ViewCompat.requestApplyInsets(binding.root)
     }
 
     @SuppressLint("SetJavaScriptEnabled")

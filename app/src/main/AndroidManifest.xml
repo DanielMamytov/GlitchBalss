@@ -34,7 +34,8 @@
 
         <activity
             android:name=".MainActivity"
-            android:exported="true">
+            android:exported="true"
+            android:screenOrientation="fullUser">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
@@ -53,23 +54,26 @@
 
         <activity
             android:name=".ConnectionErrorActivity"
-            android:exported="false" />
+            android:exported="false"
+            android:screenOrientation="fullUser" />
 
         <activity
             android:name=".ui.activity.GameActivity"
-            android:exported="false" />
+            android:exported="false"
+            android:screenOrientation="fullUser" />
 
         <activity
             android:name=".web.NotificationPromptActivity"
-            android:exported="false" />
+            android:exported="false"
+            android:screenOrientation="fullUser" />
 
         <activity
             android:name=".web.WebViewActivity"
-            android:configChanges="orientation|screenSize|smallestScreenSize"
             android:exported="false"
             android:launchMode="singleTask"
+            android:screenOrientation="fullUser"
             android:theme="@style/Theme.GLITCHBALLS.WebFullscreen"
-            android:windowSoftInputMode="stateHidden|adjustNothing" />
+            android:windowSoftInputMode="stateHidden|adjustResize" />
 
         <service
             android:name=".web.GlitchMessagingService"
