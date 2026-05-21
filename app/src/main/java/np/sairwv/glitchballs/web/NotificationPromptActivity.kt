@@ -17,11 +17,6 @@ import androidx.core.view.updatePadding
 import np.sairwv.glitchballs.AppIntents
 import np.sairwv.glitchballs.GlitchBallsApp
 import np.sairwv.glitchballs.databinding.ActivityNotificationPromptBinding
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.SupervisorJob
-import kotlinx.coroutines.cancel
-import kotlinx.coroutines.launch
 
 class NotificationPromptActivity : AppCompatActivity() {
 
@@ -29,16 +24,14 @@ class NotificationPromptActivity : AppCompatActivity() {
 
     private val app by lazy { application as GlitchBallsApp }
 
-    private val activityScope = CoroutineScope(
-        SupervisorJob() + Dispatchers.Main.immediate,
-    )
 
     private val requestNotificationsPermission = registerForActivityResult(
         ActivityResultContracts.RequestPermission(),
     ) { granted ->
         if (granted) {
             app.launchPreferences.markNotificationPromptCompleted()
-            syncPushTokenAndOpenWebView()
+            openWebView()
+            app.syncConfigForUpdatedPushToken()
         } else {
             val canRequestAgain = canRequestNotificationsLaterAfterSystemDenial()
 
@@ -64,7 +57,8 @@ class NotificationPromptActivity : AppCompatActivity() {
 
         if (areNotificationsAlreadyAllowed()) {
             app.launchPreferences.markNotificationPromptCompleted()
-            syncPushTokenAndOpenWebView()
+            openWebView()
+            app.syncConfigForUpdatedPushToken()
             return
         }
 
@@ -102,10 +96,6 @@ class NotificationPromptActivity : AppCompatActivity() {
         }
     }
 
-    override fun onDestroy() {
-        activityScope.cancel()
-        super.onDestroy()
-    }
 
     private fun deferPromptAndOpenWebView() {
         app.launchPreferences.deferNotificationPrompt()
@@ -115,7 +105,8 @@ class NotificationPromptActivity : AppCompatActivity() {
     private fun requestNotificationsAccess() {
         if (areNotificationsAlreadyAllowed()) {
             app.launchPreferences.markNotificationPromptCompleted()
-            syncPushTokenAndOpenWebView()
+            openWebView()
+            app.syncConfigForUpdatedPushToken()
             return
         }
 
@@ -169,25 +160,6 @@ class NotificationPromptActivity : AppCompatActivity() {
 
         return shouldShowRequestPermissionRationale(Manifest.permission.POST_NOTIFICATIONS)
     }
-
-    private fun syncPushTokenAndOpenWebView() {
-        binding.allowButton.isEnabled = false
-        binding.skipButton.isEnabled = false
-
-        activityScope.launch {
-            val synced = app.syncConfigForUpdatedPushTokenNow()
-
-            val updatedUrl = app.launchPreferences.cachedWebUrl
-                .takeIf {
-                    synced &&
-                            !intent.getBooleanExtra(AppIntents.EXTRA_IS_EPHEMERAL_URL, false) &&
-                            !it.isNullOrBlank()
-                }
-
-            openWebView(updatedUrl)
-        }
-    }
-
 
     private fun openWebView(updatedUrl: String? = null) {
         startActivity(

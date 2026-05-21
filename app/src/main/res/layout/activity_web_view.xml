@@ -23,17 +23,6 @@
             android:layout_height="match_parent"
             android:fitsSystemWindows="false" />
 
-        <com.google.android.material.progressindicator.LinearProgressIndicator
-            android:id="@+id/progressBar"
-            android:layout_width="match_parent"
-            android:layout_height="4dp"
-            android:indeterminate="false"
-            android:max="100"
-            android:progress="0"
-            android:visibility="gone"
-            app:indicatorColor="@color/glitch_green"
-            app:trackColor="@color/panel_surface_alt" />
-
     </FrameLayout>
 
 </FrameLayout>
