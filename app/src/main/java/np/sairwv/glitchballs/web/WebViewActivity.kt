@@ -63,7 +63,6 @@ class WebViewActivity : AppCompatActivity() {
 
         enableEdgeToEdge()
         configureFullscreenWindow()
-        preventSystemKeyboardPanOrDoubleResize()
 
         binding = ActivityWebViewBinding.inflate(layoutInflater)
         setContentView(binding.root)
@@ -89,7 +88,6 @@ class WebViewActivity : AppCompatActivity() {
             if (webBundle != null) {
                 binding.webView.restoreState(webBundle)
                 lastRequestedUrl = binding.webView.url
-                binding.progressBar.isVisible = false
             } else {
                 loadFromIntent(intent, force = true)
             }
@@ -147,8 +145,8 @@ class WebViewActivity : AppCompatActivity() {
 
     private fun applyFullBleedInsets() {
         ViewCompat.setOnApplyWindowInsetsListener(binding.root) { _, insets ->
-            val systemBars = insets.getInsetsIgnoringVisibility(
-                WindowInsetsCompat.Type.systemBars(),
+            val systemBars = insets.getInsets(
+                WindowInsetsCompat.Type.systemBars() or WindowInsetsCompat.Type.ime(),
             )
             val displayCutout = insets.getInsetsIgnoringVisibility(
                 WindowInsetsCompat.Type.displayCutout(),
@@ -161,7 +159,7 @@ class WebViewActivity : AppCompatActivity() {
                 bottom = maxOf(systemBars.bottom, displayCutout.bottom),
             )
             hideSystemBars()
-            WindowInsetsCompat.CONSUMED
+            insets
         }
 
         ViewCompat.requestApplyInsets(binding.root)
@@ -194,12 +192,6 @@ class WebViewActivity : AppCompatActivity() {
         }
 
         binding.webView.webChromeClient = object : WebChromeClient() {
-            override fun onProgressChanged(view: WebView?, newProgress: Int) {
-                binding.progressBar.progress = newProgress
-                binding.progressBar.isVisible = newProgress in 1..99
-                hideSystemBars()
-            }
-
             override fun onPermissionRequest(request: PermissionRequest?) {
                 if (request == null) {
                     return
@@ -260,7 +252,6 @@ class WebViewActivity : AppCompatActivity() {
             override fun onPageFinished(view: WebView?, url: String?) {
                 super.onPageFinished(view, url)
 
-                binding.progressBar.isVisible = false
                 hideSystemBars()
             }
 
@@ -293,7 +284,6 @@ class WebViewActivity : AppCompatActivity() {
                     }
                 }
 
-                binding.progressBar.isVisible = false
             }
         }
     }
@@ -443,12 +433,6 @@ class WebViewActivity : AppCompatActivity() {
         }
     }
 
-    private fun preventSystemKeyboardPanOrDoubleResize() {
-        window.setSoftInputMode(
-            WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN or
-                    WindowManager.LayoutParams.SOFT_INPUT_ADJUST_NOTHING,
-        )
-    }
 
     private fun sanitizeUserAgent(defaultUserAgent: String): String {
         return defaultUserAgent
