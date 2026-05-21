@@ -89,10 +89,10 @@ class WebViewActivity : AppCompatActivity() {
                 binding.webView.restoreState(webBundle)
                 lastRequestedUrl = binding.webView.url
             } else {
-                loadFromIntent(intent, force = true)
+                loadFromIntent(intent, force = false)
             }
         } else {
-            loadFromIntent(intent, force = true)
+            loadFromIntent(intent, force = false)
         }
     }
 
@@ -100,7 +100,7 @@ class WebViewActivity : AppCompatActivity() {
         super.onNewIntent(intent)
         setIntent(intent)
         hideSystemBars()
-        loadFromIntent(intent, force = true)
+        loadFromIntent(intent, force = false)
     }
 
     override fun onConfigurationChanged(newConfig: Configuration) {
