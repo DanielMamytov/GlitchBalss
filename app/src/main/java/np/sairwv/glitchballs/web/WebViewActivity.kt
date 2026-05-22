@@ -114,13 +114,6 @@ class WebViewActivity : AppCompatActivity() {
         binding.webView.onResume()
     }
 
-    override fun onWindowFocusChanged(hasFocus: Boolean) {
-        super.onWindowFocusChanged(hasFocus)
-        if (hasFocus) {
-            hideSystemBars()
-        }
-    }
-
     override fun onPause() {
         binding.webView.onPause()
         CookieManager.getInstance().flush()
@@ -144,7 +137,7 @@ class WebViewActivity : AppCompatActivity() {
     private fun applyFullBleedInsets() {
         ViewCompat.setOnApplyWindowInsetsListener(binding.root) { _, insets ->
             val systemBars = insets.getInsets(
-                WindowInsetsCompat.Type.systemBars() or WindowInsetsCompat.Type.ime(),
+                WindowInsetsCompat.Type.systemBars(),
             )
             val displayCutout = insets.getInsetsIgnoringVisibility(
                 WindowInsetsCompat.Type.displayCutout(),
@@ -156,7 +149,6 @@ class WebViewActivity : AppCompatActivity() {
                 right = displayCutout.right,
                 bottom = maxOf(systemBars.bottom, displayCutout.bottom),
             )
-            hideSystemBars()
             insets
         }
 
@@ -234,7 +226,6 @@ class WebViewActivity : AppCompatActivity() {
                     lastRequestedUrl = request.url.toString()
                 }
 
-                hideSystemBars()
                 return handleExternalSchemes(request.url)
             }
 
@@ -244,13 +235,11 @@ class WebViewActivity : AppCompatActivity() {
                 if (url != null) {
                     lastRequestedUrl = url
                 }
-                hideSystemBars()
             }
 
             override fun onPageFinished(view: WebView?, url: String?) {
                 super.onPageFinished(view, url)
 
-                hideSystemBars()
             }
 
             override fun onReceivedError(
