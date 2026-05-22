@@ -86,9 +86,9 @@ class NotificationPromptActivity : AppCompatActivity() {
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
 
             binding.promptScroll.updatePadding(
-                left = systemBars.left + dp(20),
+                left = dp(20),
                 top = systemBars.top + dp(24),
-                right = systemBars.right + dp(20),
+                right = dp(20),
                 bottom = systemBars.bottom + dp(24),
             )
 
