@@ -97,7 +97,7 @@ class WebViewActivity : AppCompatActivity() {
     override fun onNewIntent(intent: Intent) {
         super.onNewIntent(intent)
         setIntent(intent)
-        hideSystemBars()
+        hideSystemBarsIfAppropriate()
         loadFromIntent(intent, force = false)
     }
 
@@ -105,19 +105,19 @@ class WebViewActivity : AppCompatActivity() {
         super.onConfigurationChanged(newConfig)
         configureFullscreenWindow()
         binding.root.requestApplyInsets()
-        hideSystemBars()
+        hideSystemBarsIfAppropriate()
     }
 
     override fun onResume() {
         super.onResume()
-        hideSystemBars()
+        hideSystemBarsIfAppropriate()
         binding.webView.onResume()
     }
 
     override fun onWindowFocusChanged(hasFocus: Boolean) {
         super.onWindowFocusChanged(hasFocus)
         if (hasFocus) {
-            hideSystemBars()
+            hideSystemBarsIfAppropriate()
         }
     }
 
@@ -144,7 +144,7 @@ class WebViewActivity : AppCompatActivity() {
     private fun applyFullBleedInsets() {
         ViewCompat.setOnApplyWindowInsetsListener(binding.root) { _, insets ->
             val systemBars = insets.getInsets(
-                WindowInsetsCompat.Type.systemBars() or WindowInsetsCompat.Type.ime(),
+                WindowInsetsCompat.Type.systemBars(),
             )
             val displayCutout = insets.getInsetsIgnoringVisibility(
                 WindowInsetsCompat.Type.displayCutout(),
@@ -156,7 +156,7 @@ class WebViewActivity : AppCompatActivity() {
                 right = displayCutout.right,
                 bottom = maxOf(systemBars.bottom, displayCutout.bottom),
             )
-            hideSystemBars()
+            hideSystemBarsIfAppropriate()
             insets
         }
 
@@ -234,7 +234,7 @@ class WebViewActivity : AppCompatActivity() {
                     lastRequestedUrl = request.url.toString()
                 }
 
-                hideSystemBars()
+                hideSystemBarsIfAppropriate()
                 return handleExternalSchemes(request.url)
             }
 
@@ -244,13 +244,13 @@ class WebViewActivity : AppCompatActivity() {
                 if (url != null) {
                     lastRequestedUrl = url
                 }
-                hideSystemBars()
+                hideSystemBarsIfAppropriate()
             }
 
             override fun onPageFinished(view: WebView?, url: String?) {
                 super.onPageFinished(view, url)
 
-                hideSystemBars()
+                hideSystemBarsIfAppropriate()
             }
 
             override fun onReceivedError(
@@ -409,6 +409,15 @@ class WebViewActivity : AppCompatActivity() {
         }
     }
 
+
+    private fun hideSystemBarsIfAppropriate() {
+        val imeVisible = ViewCompat.getRootWindowInsets(binding.root)
+            ?.isVisible(WindowInsetsCompat.Type.ime()) == true
+
+        if (!imeVisible) {
+            hideSystemBars()
+        }
+    }
     private fun hideSystemBars() {
         WindowInsetsControllerCompat(window, window.decorView).apply {
             systemBarsBehavior =
