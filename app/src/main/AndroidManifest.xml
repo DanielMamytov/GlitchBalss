@@ -73,7 +73,7 @@
             android:launchMode="singleTask"
             android:screenOrientation="fullUser"
             android:theme="@style/Theme.GLITCHBALLS.WebFullscreen"
-            android:windowSoftInputMode="stateHidden|adjustResize"
+            android:windowSoftInputMode="stateHidden|adjustNothing"
             android:configChanges="orientation|screenSize|smallestScreenSize" />
 
         <service

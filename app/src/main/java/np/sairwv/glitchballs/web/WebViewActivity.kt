@@ -41,6 +41,10 @@ class WebViewActivity : AppCompatActivity() {
     private var fileChooserCallback: ValueCallback<Array<Uri>>? = null
     private var cameraCaptureUri: Uri? = null
     private var lastRequestedUrl: String? = null
+    private var lastAppliedInsetsBottom = Int.MIN_VALUE
+    private var lastAppliedCutoutLeft = Int.MIN_VALUE
+    private var lastAppliedCutoutTop = Int.MIN_VALUE
+    private var lastAppliedCutoutRight = Int.MIN_VALUE
 
     private val fileChooserLauncher = registerForActivityResult(
         ActivityResultContracts.StartActivityForResult(),
@@ -143,19 +147,36 @@ class WebViewActivity : AppCompatActivity() {
 
     private fun applyFullBleedInsets() {
         ViewCompat.setOnApplyWindowInsetsListener(binding.root) { _, insets ->
+            val systemBars = insets.getInsetsIgnoringVisibility(
+                WindowInsetsCompat.Type.systemBars(),
+            )
             val displayCutout = insets.getInsetsIgnoringVisibility(
                 WindowInsetsCompat.Type.displayCutout(),
             )
             val imeInsets = insets.getInsets(WindowInsetsCompat.Type.ime())
+            val targetBottomInset = maxOf(systemBars.bottom, displayCutout.bottom, imeInsets.bottom)
 
-            binding.webViewHost.updatePadding(
-                left = displayCutout.left,
-                top = displayCutout.top,
-                right = displayCutout.right,
-                bottom = maxOf(displayCutout.bottom, imeInsets.bottom),
+            val hasInsetChanges = lastAppliedCutoutLeft != displayCutout.left ||
+                lastAppliedCutoutTop != maxOf(systemBars.top, displayCutout.top) ||
+                lastAppliedCutoutRight != displayCutout.right ||
+                lastAppliedInsetsBottom != targetBottomInset
+
+            if (hasInsetChanges) {
+                binding.webViewHost.updatePadding(
+                    left = displayCutout.left,
+                    top = maxOf(systemBars.top, displayCutout.top),
+                    right = displayCutout.right,
+                    bottom = targetBottomInset,
                 )
+
+                lastAppliedCutoutLeft = displayCutout.left
+                lastAppliedCutoutTop = maxOf(systemBars.top, displayCutout.top)
+                lastAppliedCutoutRight = displayCutout.right
+                lastAppliedInsetsBottom = targetBottomInset
+            }
+
             hideSystemBarsIfAppropriate()
-            insets
+            WindowInsetsCompat.CONSUMED
         }
 
         ViewCompat.requestApplyInsets(binding.root)
