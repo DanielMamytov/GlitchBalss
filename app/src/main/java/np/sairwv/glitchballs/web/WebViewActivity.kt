@@ -149,6 +149,9 @@ class WebViewActivity : AppCompatActivity() {
 
     private fun applyFullBleedInsets() {
         ViewCompat.setOnApplyWindowInsetsListener(binding.root) { _, insets ->
+            val systemBars = insets.getInsetsIgnoringVisibility(
+                WindowInsetsCompat.Type.systemBars(),
+            )
             val displayCutout = insets.getInsetsIgnoringVisibility(
                 WindowInsetsCompat.Type.displayCutout(),
             )
@@ -175,7 +178,7 @@ class WebViewActivity : AppCompatActivity() {
             }
 
             hideSystemBarsIfAppropriate()
-            insets
+            WindowInsetsCompat.CONSUMED
         }
 
         ViewCompat.requestApplyInsets(binding.root)
