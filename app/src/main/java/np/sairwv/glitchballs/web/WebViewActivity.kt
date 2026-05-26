@@ -78,6 +78,8 @@ class WebViewActivity : AppCompatActivity() {
             override fun handleOnBackPressed() {
                 if (binding.webView.canGoBack()) {
                     binding.webView.goBack()
+                }else{
+                    moveTaskToBack(true)
                 }
             }
         })
@@ -154,23 +156,23 @@ class WebViewActivity : AppCompatActivity() {
                 WindowInsetsCompat.Type.displayCutout(),
             )
             val imeInsets = insets.getInsets(WindowInsetsCompat.Type.ime())
-            val targetBottomInset = maxOf(systemBars.bottom, displayCutout.bottom, imeInsets.bottom)
+            val targetBottomInset = maxOf(displayCutout.bottom, imeInsets.bottom)
 
             val hasInsetChanges = lastAppliedCutoutLeft != displayCutout.left ||
-                lastAppliedCutoutTop != maxOf(systemBars.top, displayCutout.top) ||
+                lastAppliedCutoutTop != displayCutout.top ||
                 lastAppliedCutoutRight != displayCutout.right ||
                 lastAppliedInsetsBottom != targetBottomInset
 
             if (hasInsetChanges) {
                 binding.webViewHost.updatePadding(
                     left = displayCutout.left,
-                    top = maxOf(systemBars.top, displayCutout.top),
+                    top = displayCutout.top,
                     right = displayCutout.right,
                     bottom = targetBottomInset,
                 )
 
                 lastAppliedCutoutLeft = displayCutout.left
-                lastAppliedCutoutTop = maxOf(systemBars.top, displayCutout.top)
+                lastAppliedCutoutTop = displayCutout.top
                 lastAppliedCutoutRight = displayCutout.right
                 lastAppliedInsetsBottom = targetBottomInset
             }
