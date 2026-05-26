@@ -146,13 +146,14 @@ class WebViewActivity : AppCompatActivity() {
             val displayCutout = insets.getInsetsIgnoringVisibility(
                 WindowInsetsCompat.Type.displayCutout(),
             )
+            val imeInsets = insets.getInsets(WindowInsetsCompat.Type.ime())
 
             binding.webViewHost.updatePadding(
                 left = displayCutout.left,
                 top = displayCutout.top,
                 right = displayCutout.right,
-                bottom = displayCutout.bottom,
-            )
+                bottom = maxOf(displayCutout.bottom, imeInsets.bottom),
+                )
             hideSystemBarsIfAppropriate()
             insets
         }
